@@ -61,6 +61,7 @@
     (let ((prefix-map (make-sparse-keymap)))
       (define-key prefix-map (kbd "lv") 'php-refactor--convert-local-to-instance-variable)
       (define-key prefix-map (kbd "rv") 'php-refactor--rename-local-variable)
+      (define-key prefix-map (kbd "rp") 'php-refactor--rename-property)
       (define-key prefix-map (kbd "em") 'php-refactor--extract-method)
       (define-key prefix-map (kbd "ou") 'php-refactor--optimize-use)
       (define-key map php-refactor-keymap-prefix prefix-map))
@@ -109,6 +110,17 @@ END is the ending position of the selected region."
   (let ((renamed (read-from-minibuffer "Specify new variable name: ")))
     (php-refactor--run-command
      "rename-local-variable"
+     (buffer-file-name)
+     (php-refactor--get-effective-line-number-as-string)
+     (thing-at-point 'symbol)
+     renamed)))
+
+(defun php-refactor--rename-property ()
+  "Rename an existing class property to the specified new name."
+  (interactive)
+  (let ((renamed (read-from-minibuffer "Specify new variable name: ")))
+    (php-refactor--run-command
+     "rename-property"
      (buffer-file-name)
      (php-refactor--get-effective-line-number-as-string)
      (thing-at-point 'symbol)
